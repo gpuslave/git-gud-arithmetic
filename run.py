@@ -72,7 +72,7 @@ def start_session(start_time, game_config):
 if __name__ == "__main__":
     start_time = time.time()
 
-    print('Welcome to the ultimate "git gud counting" game!')
+    print('Welcome to the ultimate "git-gud-arithmetic" game!')
     print("Please input 3 values: (num size, num size, operation)")
     config_tuple = namedtuple("Config", ["first_num", "second_num", "operation"])
     game_config = config_tuple._make(str(input()).split(sep=None))
