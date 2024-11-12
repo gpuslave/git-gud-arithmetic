@@ -1,11 +1,20 @@
 import time
 import csv
 import random
+import re
 from collections import namedtuple
 
+
 # import sys
-# import os
+import os
+
 OPERATIONS = ("+", "-", "*")
+OPERATOR_MAP = {
+    "+": lambda x, y: x + y,
+    "-": lambda x, y: x - y,
+    "*": lambda x, y: x * y,
+    "//": lambda x, y: x // y,
+}
 
 
 def isoperation(string: str):
@@ -13,17 +22,50 @@ def isoperation(string: str):
 
 
 def start_session(start_time, game_config):
+    log_list = []
+    score, total = 0, 0
     while time.time() - start_time <= 20:
-        x = random.randint(0, 10**game_config.first_num)
-        y = random.randint(0, 10**game_config.second_num)
+        answ = None
+        x = random.randint(0, 10 ** int(game_config.first_num) - 1)
+        y = random.randint(0, 10 ** int(game_config.second_num) - 1)
+        op = game_config.operation
+        think_time_start = time.time()
+        print(f"{x} {op} {y}")
 
-        answ = x
-        res = int(input())
-        print(x)
+        answ = OPERATOR_MAP[op](x, y)
 
-    print("Your 5 min session has ran out! Well done")
+        res = int("".join(re.split(r"\D*", input(), flags=re.IGNORECASE)))
+        think_time_end = time.time()
+
+        right = False
+        if res == answ:
+            score += 1
+            right = True
+
+        log_list.append(
+            {
+                "num_1": x,
+                "operation": op,
+                "num_2": y,
+                "is_right": int(right),
+                "think_time": round(think_time_end - think_time_start, 3),
+            }
+        )
+
+        total += 1
+    with open("results.csv", "a", newline="") as csvfile:
+        fieldnames = ["num_1", "operation", "num_2", "is_right", "think_time"]
+        logwriter = csv.DictWriter(csvfile, delimiter=",", fieldnames=fieldnames)
+
+        if os.path.getsize("results.csv") <= 0:
+            logwriter.writeheader()
+
+        for log in log_list:
+            logwriter.writerow(log)
+
+    print("Your session has ran out! Well done")
     print(
-        "You scored: ",
+        f"You scored: {score}/{total}, that's {int(score/total*100)}% accuracy",
     )
 
 
