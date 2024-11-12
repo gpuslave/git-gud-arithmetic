@@ -13,7 +13,7 @@ OPERATOR_MAP = {
     "+": lambda x, y: x + y,
     "-": lambda x, y: x - y,
     "*": lambda x, y: x * y,
-    "//": lambda x, y: x // y,
+    "/": lambda x, y: x // y,
 }
 
 
@@ -24,11 +24,11 @@ def isoperation(string: str):
 def start_session(start_time, game_config):
     log_list = []
     score, total = 0, 0
-    while time.time() - start_time <= 20:
-        answ = None
+    answ = None
+    op = game_config.operation
+    while time.time() - start_time <= 30:
         x = random.randint(1, 10 ** int(game_config.first_num) - 1)
         y = random.randint(1, 10 ** int(game_config.second_num) - 1)
-        op = game_config.operation
         think_time_start = time.time()
         print(f"{x} {op} {y}")
 
@@ -73,7 +73,10 @@ if __name__ == "__main__":
     start_time = time.time()
 
     print('Welcome to the ultimate "git-gud-arithmetic" game!')
-    print("Please input 3 values: (num size, num size, operation)")
+    print(
+        "Please input 3 values: (num size, num size, operation) separated by spaces\n",
+        "e.g.: 1 2 + ",
+    )
     config_tuple = namedtuple("Config", ["first_num", "second_num", "operation"])
     game_config = config_tuple._make(str(input()).split(sep=None))
 
