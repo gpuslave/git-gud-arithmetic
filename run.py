@@ -26,8 +26,8 @@ def start_session(start_time, game_config):
     score, total = 0, 0
     while time.time() - start_time <= 20:
         answ = None
-        x = random.randint(0, 10 ** int(game_config.first_num) - 1)
-        y = random.randint(0, 10 ** int(game_config.second_num) - 1)
+        x = random.randint(1, 10 ** int(game_config.first_num) - 1)
+        y = random.randint(1, 10 ** int(game_config.second_num) - 1)
         op = game_config.operation
         think_time_start = time.time()
         print(f"{x} {op} {y}")
