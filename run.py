@@ -26,7 +26,7 @@ def start_session(start_time, game_config):
     score, total = 0, 0
     answ = None
     op = game_config.operation
-    while time.time() - start_time <= 30:
+    while time.time() - start_time <= 10:
         x = random.randint(1, 10 ** int(game_config.first_num) - 1)
         y = random.randint(1, 10 ** int(game_config.second_num) - 1)
         think_time_start = time.time()
@@ -34,7 +34,7 @@ def start_session(start_time, game_config):
 
         answ = OPERATOR_MAP[op](x, y)
 
-        res = int("".join(re.split(r"\D*", input(), flags=re.IGNORECASE)))
+        res = int("".join(re.split(r"(?!-)\D*", input(), flags=re.IGNORECASE)))
         think_time_end = time.time()
 
         right = False
@@ -67,6 +67,12 @@ def start_session(start_time, game_config):
     print(
         f"You scored: {score}/{total}, that's {int(score/total*100)}% accuracy",
     )
+
+    if not all([bool(x["is_right"]) for x in log_list]):
+        print("You've failed at: ")
+        for log in log_list:
+            if not log["is_right"]:
+                print(log["num_1"], log["operation"], log["num_2"])
 
 
 if __name__ == "__main__":
